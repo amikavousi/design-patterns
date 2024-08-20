@@ -1,5 +1,6 @@
 <?php
 
+use App\DesignPatterns\SimpleFactory\ProductFactory;
 use App\DesignPatterns\StaticFactory\FileProcessor;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
@@ -18,9 +19,23 @@ Route::middleware('auth')->group(function () {
     Route::delete('/profile', [ProfileController::class, 'destroy'])->name('profile.destroy');
 });
 
-require __DIR__.'/auth.php';
+require __DIR__ . '/auth.php';
 
+
+// static factory design pattern
 Route::get('/data-reader', function () {
-   $dataReader = FileProcessor::dataReader('csvs');
-   echo $dataReader->readData('test.csv');
+    $dataReader = FileProcessor::dataReader('csv');
+    echo $dataReader->readData('test.csv');
+});
+
+// simple factory design pattern
+Route::get('/product', function () {
+    $product = new ProductFactory();
+    $createdProduct = $product->creatProduct('digital', 'spiderman movie', 30, 'this is spiderman movie');
+
+    return [
+        $createdProduct->getName(),
+        $createdProduct->getPrice(),
+        $createdProduct->getDescription(),
+    ];
 });
