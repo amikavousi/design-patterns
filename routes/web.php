@@ -1,5 +1,6 @@
 <?php
 
+use App\DesignPatterns\StaticFactory\FileProcessor;
 use App\Http\Controllers\ProfileController;
 use Illuminate\Support\Facades\Route;
 
@@ -18,3 +19,8 @@ Route::middleware('auth')->group(function () {
 });
 
 require __DIR__.'/auth.php';
+
+Route::get('/data-reader', function () {
+   $dataReader = FileProcessor::dataReader('csvs');
+   echo $dataReader->readData('test.csv');
+});
