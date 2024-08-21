@@ -1,5 +1,7 @@
 <?php
 
+use App\DesignPatterns\FactoryMethod\CreditCardFactory;
+use App\DesignPatterns\FactoryMethod\PayPalFactory;
 use App\DesignPatterns\SimpleFactory\ProductFactory;
 use App\DesignPatterns\StaticFactory\FileProcessor;
 use App\Http\Controllers\ProfileController;
@@ -38,4 +40,17 @@ Route::get('/product', function () {
         $createdProduct->getPrice(),
         $createdProduct->getDescription(),
     ];
+});
+
+// factory method design pattern
+Route::get('/payment', function () {
+    $creditCard = new CreditCardFactory('6362141000000', '123', '01/09');
+    $newPayment = $creditCard->createPayment();
+    $processCreditCardPayment = $newPayment->processPayment('1000');
+
+    $paypal = new PayPalFactory('test@gmail.com', '12345');
+    $newPayment = $paypal->createPayment();
+    $processPayPalPayment = $newPayment->processPayment(500);
+
+    return response()->json(['status' => true, [$processCreditCardPayment, $processPayPalPayment]]);
 });
